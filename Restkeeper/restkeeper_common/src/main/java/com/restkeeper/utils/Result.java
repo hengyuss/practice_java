@@ -15,4 +15,18 @@ public class Result {
     private Object data;
 
     private String token;
+
+
+   public Result ok(Object data){
+       this.data=ResultCode.success;
+       this.status=200;
+       this.desc="ok";
+       return this;
+   };
+
+   public Result error(String msg){
+       this.status=ResultCode.error;
+       this.desc=msg;
+       return this;
+   };
 }

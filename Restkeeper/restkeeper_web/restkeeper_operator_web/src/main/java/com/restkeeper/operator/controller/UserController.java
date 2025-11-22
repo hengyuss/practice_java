@@ -5,15 +5,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.restkeeper.operator.entity.OperatorUser;
 import com.restkeeper.operator.service.IOperatorUserService;
+import com.restkeeper.operator.vo.LoginVo;
+import com.restkeeper.utils.Result;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 管理员的登录接口
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Api(tags = {"管理员相关接口"})
 public class UserController{
+
 
 
     @Value("${server.port}")
@@ -44,6 +47,13 @@ public class UserController{
         IPage<OperatorUser> page = new Page<OperatorUser>(pageNum,pageSize);
         log.info("管理员数据分页查询："+ JSON.toJSONString(page));
         return operatorUserService.page(page);
+    }
+
+    @PostMapping("/login")
+    @ApiOperation("登录")
+    @ApiImplicitParam(name = "Authorization", value = "jwt token", required = false, dataType = "String",paramType="header")
+    public Result login(@RequestBody LoginVo loginVo){
+        return operatorUserService.login(loginVo.getUsername(), loginVo.getPassword());
     }
 
 
