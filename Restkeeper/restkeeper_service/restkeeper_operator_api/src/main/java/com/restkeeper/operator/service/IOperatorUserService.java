@@ -7,6 +7,6 @@ import com.restkeeper.utils.Result;
 public interface IOperatorUserService extends IService<OperatorUser> {
 
 
-    public Result login(String username,String password);
+    public Result login(String username, String password);
 
 }

@@ -13,22 +13,20 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
-
  * <p>
-
+ * <p>
  * 企业账号管理
-
+ *
  * </p>
-
  */
 
 @Data
 
 @Accessors(chain = true)
 
-@TableName(value="t_enterprise_account")
+@TableName(value = "t_enterprise_account")
 
-@ApiModel(value="EnterpriseAccount对象", description="企业账号管理对象")
+@ApiModel(value = "EnterpriseAccount对象", description = "企业账号管理对象")
 
 public class EnterpriseAccount implements Serializable {
 
@@ -38,7 +36,7 @@ public class EnterpriseAccount implements Serializable {
 
     @ApiModelProperty(value = "企业id")
 
-    @TableId(type= IdType.ASSIGN_ID)
+    @TableId(type = IdType.ASSIGN_ID)
 
     private String enterpriseId;
 
@@ -77,11 +75,9 @@ public class EnterpriseAccount implements Serializable {
     private String province;
 
 
-
     @ApiModelProperty(value = "市")
 
     private String city;
-
 
 
     @ApiModelProperty(value = "区")
@@ -107,7 +103,6 @@ public class EnterpriseAccount implements Serializable {
     @ApiModelProperty(value = "状态(试用中1，已停用0，正式2)")
 
     private Integer status;
-
 
 
     @ApiModelProperty(value = "最后更新时间")

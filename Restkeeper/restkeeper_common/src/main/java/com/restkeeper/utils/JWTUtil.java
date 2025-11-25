@@ -15,9 +15,10 @@ import java.util.Date;
 import java.util.Map;
 
 
-public class JWTUtil{
+public class JWTUtil {
     /**
      * 签发JWT
+     *
      * @param tokenMap
      * @param secret
      * @return
@@ -77,11 +78,11 @@ public class JWTUtil{
         }//设置需要解析的jwt
     }
 
-    public static Map<String,Object> decode(String token) throws IOException {
+    public static Map<String, Object> decode(String token) throws IOException {
         String bodyData = token.split("\\.")[1];
 
-        String bodyStr = new String(Base64.decodeBase64(bodyData),"UTF-8");
-        return JSON.parseObject(bodyStr,Map.class);
+        String bodyStr = new String(Base64.decodeBase64(bodyData), "UTF-8");
+        return JSON.parseObject(bodyStr, Map.class);
     }
 
     /**
@@ -99,14 +100,14 @@ public class JWTUtil{
     }
 
     @Data
-    public static class VerifyResult{
+    public static class VerifyResult {
         private boolean isValidate;
         /**
          * 5001:token过期;5002:无效token;5003:token校验异常
          */
         private int code;
 
-        private Map<String,Object> tokenMap;
+        private Map<String, Object> tokenMap;
 
         public VerifyResult(boolean isValidate, int code) {
             this.isValidate = isValidate;

@@ -12,7 +12,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
@@ -24,14 +23,13 @@ import org.springframework.web.bind.annotation.*;
 @RefreshScope //配置中心的自动刷新
 @Slf4j
 @Api(tags = {"管理员相关接口"})
-public class UserController{
-
+public class UserController {
 
 
     @Value("${server.port}")
     private String port;
 
-    @Reference(version = "1.0.0",check = false)
+    @Reference(version = "1.0.0", check = false)
     private IOperatorUserService operatorUserService;
 
     @GetMapping(value = "/echo")
@@ -42,17 +40,17 @@ public class UserController{
 
     @GetMapping("/pageList/{page}/{pageSize}")
     public IPage<OperatorUser> findListByPage(@PathVariable("page") int pageNum,
-                                              @PathVariable("pageSize") int pageSize){
+                                              @PathVariable("pageSize") int pageSize) {
 
-        IPage<OperatorUser> page = new Page<OperatorUser>(pageNum,pageSize);
-        log.info("管理员数据分页查询："+ JSON.toJSONString(page));
+        IPage<OperatorUser> page = new Page<OperatorUser>(pageNum, pageSize);
+        log.info("管理员数据分页查询：" + JSON.toJSONString(page));
         return operatorUserService.page(page);
     }
 
     @PostMapping("/login")
     @ApiOperation("登录")
-    @ApiImplicitParam(name = "Authorization", value = "jwt token", required = false, dataType = "String",paramType="header")
-    public Result login(@RequestBody LoginVo loginVo){
+    @ApiImplicitParam(name = "Authorization", value = "jwt token", required = false, dataType = "String", paramType = "header")
+    public Result login(@RequestBody LoginVo loginVo) {
         return operatorUserService.login(loginVo.getUsername(), loginVo.getPassword());
     }
 

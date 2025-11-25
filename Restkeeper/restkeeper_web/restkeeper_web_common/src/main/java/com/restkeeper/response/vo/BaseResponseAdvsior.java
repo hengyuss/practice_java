@@ -1,6 +1,5 @@
 package com.restkeeper.response.vo;
 
-import com.restkeeper.utils.Result;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;

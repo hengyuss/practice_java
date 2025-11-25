@@ -21,10 +21,11 @@ public class SwaggerConfiguration {
 
     /**
      * swagger2的配置文件，这里可以配置swagger2的一些基本的内容，比如扫描的包等等
+     *
      * @return
      */
     @Bean
-    public Docket createRestfulApi(){
+    public Docket createRestfulApi() {
         List<Parameter> pars = new ArrayList<Parameter>();
         ParameterBuilder tokenPar = new ParameterBuilder();
         tokenPar.name("Authorization").description("jwt token").modelRef(new ModelRef("string")).parameterType("header").required(true).build();
@@ -40,9 +41,10 @@ public class SwaggerConfiguration {
 
     /**
      * 构建 api文档的详细信息函数,注意这里的注解引用的是哪个
+     *
      * @return
      */
-    private ApiInfo apiInfo(){
+    private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 //页面标题
                 .title("RESTful API")

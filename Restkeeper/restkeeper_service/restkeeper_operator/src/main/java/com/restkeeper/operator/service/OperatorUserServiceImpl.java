@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 //@Service("operatorUserService")
-@Service(version = "1.0.0",protocol = "dubbo")
+@Service(version = "1.0.0", protocol = "dubbo")
 /**
  * dubbo中支持的协议
  * dubbo 默认
@@ -33,7 +33,7 @@ import java.util.Map;
  */
 
 @RefreshScope
-public class OperatorUserServiceImpl extends ServiceImpl<OperatorUserMapper, OperatorUser> implements IOperatorUserService{
+public class OperatorUserServiceImpl extends ServiceImpl<OperatorUserMapper, OperatorUser> implements IOperatorUserService {
 
     @Value("${gateway.secret}")
     private String secret;
@@ -41,17 +41,17 @@ public class OperatorUserServiceImpl extends ServiceImpl<OperatorUserMapper, Ope
     @Override
     public Result login(String username, String password) {
         Result result = new Result();
-        if(StringUtil.isNullOrEmpty(username) || StringUtil.isNullOrEmpty(password)){
+        if (StringUtil.isNullOrEmpty(username) || StringUtil.isNullOrEmpty(password)) {
             result.error("用户名或密码错误");
         }
         QueryWrapper<OperatorUser> queryWrapper = new QueryWrapper<>();
         OperatorUser queryUser = this.getOne(queryWrapper);
-        if(queryUser == null){
+        if (queryUser == null) {
             result.error("用户不存在");
         }
         String queryPassword = queryUser.getLoginpass();
         String salts = MD5CryptUtil.getSalts(queryPassword);
-        if (!StringUtils.equals(Md5Crypt.md5Crypt(password.getBytes(), salts), queryPassword)){
+        if (!StringUtils.equals(Md5Crypt.md5Crypt(password.getBytes(), salts), queryPassword)) {
             result.error("用户名或密码错误");
         }
 

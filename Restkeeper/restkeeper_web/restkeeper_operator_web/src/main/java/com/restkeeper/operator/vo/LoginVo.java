@@ -9,5 +9,5 @@ public class LoginVo {
     @ApiModelProperty(value = "用户名")
     public String username;
     @ApiModelProperty(value = "密码")
-     public String password;
+    public String password;
 }

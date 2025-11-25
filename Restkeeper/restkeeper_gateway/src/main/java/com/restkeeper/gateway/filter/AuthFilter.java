@@ -15,7 +15,6 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,22 +28,22 @@ public class AuthFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpResponse response = exchange.getResponse();
         String paths = exchange.getRequest().getURI().getPath();
-        if(excludeUrls.contains(paths)){
+        if (excludeUrls.contains(paths)) {
             return chain.filter(exchange);
         }
         String token = exchange.getRequest().getHeaders().getFirst("Authorization");
-        if(StringUtils.isNotEmpty(token)){
+        if (StringUtils.isNotEmpty(token)) {
             JWTUtil.VerifyResult verifyResult = JWTUtil.verifyJwt(token, secret);
-            if (verifyResult.isValidate()){
+            if (verifyResult.isValidate()) {
                 return chain.filter(exchange);
-            }else {
+            } else {
                 Map<String, Object> responseData = Maps.newHashMap();
                 responseData.put("code", verifyResult.getCode());
                 responseData.put("message", "验证失败");
                 return responseError(response, responseData);
             }
-        }else {
-            Map<String,Object> responseData = Maps.newHashMap();
+        } else {
+            Map<String, Object> responseData = Maps.newHashMap();
 
             responseData.put("code", 401);
 
@@ -52,7 +51,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
             responseData.put("cause", "Token is empty");
 
-            return responseError(response,responseData);
+            return responseError(response, responseData);
         }
     }
 
