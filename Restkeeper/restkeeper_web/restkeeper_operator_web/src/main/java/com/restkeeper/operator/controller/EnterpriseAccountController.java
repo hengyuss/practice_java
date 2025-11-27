@@ -1,11 +1,16 @@
 package com.restkeeper.operator.controller;
 
+import com.restkeeper.operator.dto.UpdateEnterpriseDTO;
 import com.restkeeper.operator.entity.EnterpriseAccount;
 import com.restkeeper.operator.service.IEnterpriseAccountService;
-import com.restkeeper.operator.vo.AddEnterpriseAccountVo;
+import com.restkeeper.operator.vo.AddEnterpriseAccountVO;
+import com.restkeeper.operator.vo.UpdateEnterpriseAccountVO;
 import com.restkeeper.response.vo.PageVO;
+import com.restkeeper.utils.Result;
+import com.restkeeper.utils.ResultCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import javax.security.auth.login.AccountException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.BeanUtils;
@@ -35,7 +40,7 @@ public class EnterpriseAccountController {
 
   @ApiOperation(value = "新增账号")
   @PutMapping("/add")
-  public boolean add(@RequestBody AddEnterpriseAccountVo addEnterpriseAccountVo) {
+  public boolean add(@RequestBody AddEnterpriseAccountVO addEnterpriseAccountVo) {
     EnterpriseAccount enterpriseAccount = new EnterpriseAccount();
 
     BeanUtils.copyProperties(addEnterpriseAccountVo, enterpriseAccount);
@@ -60,6 +65,23 @@ public class EnterpriseAccountController {
   @GetMapping(value = "/getById/{id}")
   public EnterpriseAccount getById(@PathVariable("id") Integer id) {
     return enterpriseAccountService.getById(id);
+  }
+
+  @ApiOperation(value = "账号编辑")
+  @PutMapping(value = "/update")
+  public Result update (@RequestBody UpdateEnterpriseAccountVO updateEnterpriseAccountVO)
+      throws AccountException {
+
+    Result result = new Result();
+    UpdateEnterpriseDTO updateEnterpriseDTO = new UpdateEnterpriseDTO();
+    BeanUtils.copyProperties(updateEnterpriseAccountVO, updateEnterpriseDTO);
+    boolean flag = enterpriseAccountService.update(updateEnterpriseDTO);
+    if (flag) {
+      return result.error("修改失败");
+    } else {
+      return result.ok("修改成功");
+    }
+
   }
 
 }

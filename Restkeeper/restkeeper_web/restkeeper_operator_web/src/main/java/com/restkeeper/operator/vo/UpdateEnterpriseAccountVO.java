@@ -1,9 +1,15 @@
 package com.restkeeper.operator.vo;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 
 @Data
+@EqualsAndHashCode(callSuper = false)
+public class UpdateEnterpriseAccountVO extends AddEnterpriseAccountVO {
 
-public class UpdateEnterpriseAccountVO {
+  @ApiModelProperty(value = "企业id")
+  private String enterpriseId;
 
 }

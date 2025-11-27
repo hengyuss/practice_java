@@ -4,12 +4,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.restkeeper.operator.dto.UpdateEnterpriseDTO;
 import com.restkeeper.operator.entity.EnterpriseAccount;
 import com.restkeeper.operator.mapper.EnterpriseAccountMapper;
 import io.netty.util.internal.StringUtil;
+import java.time.LocalDateTime;
+import javax.security.auth.login.AccountException;
 import org.apache.commons.codec.digest.Md5Crypt;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.dubbo.config.annotation.Service;
+import org.springframework.beans.BeanUtils;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +48,45 @@ public class EnterpriseAccountServiceImpl extends ServiceImpl<EnterpriseAccountM
         return flag;
     }
 
-    private String getShopId() {
+  @Override
+  public boolean update(UpdateEnterpriseDTO updateEnterpriseDTO) throws AccountException {
+
+    EnterpriseAccount enterpriseAccount = this.getById(
+        updateEnterpriseDTO.getEnterpriseId());
+    if (enterpriseAccount == null){
+      throw new AccountException("修改账户不存在");
+    }
+
+    if (updateEnterpriseDTO.getStatus() != null) {
+      if (enterpriseAccount.getStatus() == 1 && updateEnterpriseDTO.getStatus() == 0) {
+        throw new AccountException("不能将正式账号改为使用账号");
+      }
+    }
+
+    if (updateEnterpriseDTO.getStatus() == 0 && enterpriseAccount.getStatus() == 1) {
+      addAccountExpireTimeDays(enterpriseAccount, updateEnterpriseDTO.getValidityDay());
+      enterpriseAccount.setApplicationTime(LocalDateTime.now());
+    }
+
+    if (updateEnterpriseDTO.getStatus() == 1 && enterpriseAccount.getStatus() == 1) {
+      addAccountExpireTimeDays(enterpriseAccount, updateEnterpriseDTO.getValidityDay());
+    }
+
+    BeanUtils.copyProperties(updateEnterpriseDTO, enterpriseAccount);
+
+    boolean flag = this.updateById(enterpriseAccount);
+
+    return flag;
+  }
+
+
+  private void addAccountExpireTimeDays(EnterpriseAccount enterpriseAccount, int days) {
+    LocalDateTime now = LocalDateTime.now();
+    LocalDateTime expireTime = now.plusDays(days);
+    enterpriseAccount.setExpireTime(expireTime);
+  }
+
+  private String getShopId() {
         String shopId = RandomStringUtils.randomNumeric(8);
         QueryWrapper<EnterpriseAccount> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("shop_id", shopId);
