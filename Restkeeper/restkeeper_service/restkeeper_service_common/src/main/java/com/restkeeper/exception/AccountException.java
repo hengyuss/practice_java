@@ -1,7 +1,6 @@
 package com.restkeeper.operator.exception;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data

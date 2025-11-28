@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.restkeeper.operator.dto.UpdateEnterpriseDTO;
 import com.restkeeper.operator.entity.EnterpriseAccount;
-import javax.security.auth.login.AccountException;
+import com.restkeeper.operator.exception.AccountException;
 
 public interface IEnterpriseAccountService extends IService<EnterpriseAccount> {
     IPage<EnterpriseAccount> queryPageByName(int pageNum, int pageSize, String name);
