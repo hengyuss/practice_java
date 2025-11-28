@@ -1,13 +1,17 @@
 package com.restkeeper.operator.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.restkeeper.operator.config.RabbitMQConfig;
 import com.restkeeper.operator.dto.UpdateEnterpriseDTO;
 import com.restkeeper.operator.entity.EnterpriseAccount;
 import com.restkeeper.operator.exception.AccountException;
 import com.restkeeper.operator.mapper.EnterpriseAccountMapper;
+import com.restkeeper.sms.SmsObject;
 import com.restkeeper.utils.AccountStatus;
 import com.restkeeper.utils.MD5CryptUtil;
 import io.netty.util.internal.StringUtil;
@@ -15,13 +19,18 @@ import java.time.LocalDateTime;
 import org.apache.commons.codec.digest.Md5Crypt;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.dubbo.config.annotation.Service;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service(version = "1.0.0", protocol = "dubbo")
 @RefreshScope
 public class EnterpriseAccountServiceImpl extends ServiceImpl<EnterpriseAccountMapper, EnterpriseAccount> implements IEnterpriseAccountService {
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Override
     public IPage<EnterpriseAccount> queryPageByName(int pageNum, int pageSize, String name) {
@@ -43,6 +52,7 @@ public class EnterpriseAccountServiceImpl extends ServiceImpl<EnterpriseAccountM
             String pwd = RandomStringUtils.randomNumeric(6);
             account.setPassword(Md5Crypt.md5Crypt(pwd.getBytes()));
             this.save(account);
+            sendMessage(account.getPhone(), account.getShopId(), pwd);
         } catch (Exception e){
             flag = false;
             throw e;
@@ -121,11 +131,25 @@ public class EnterpriseAccountServiceImpl extends ServiceImpl<EnterpriseAccountM
     String newPasswordMd5 = Md5Crypt.md5Crypt(newPassword.getBytes());
     enterpriseAccount.setPassword(newPasswordMd5);
     boolean flag = this.updateById(enterpriseAccount);
+    sendMessage(enterpriseAccount.getPhone(), enterpriseAccount.getShopId(), newPassword);
     return flag;
   }
 
+    public void sendMessage(String phone, String shopId, String pwd) {
+        SmsObject smsObject = new SmsObject();
+        smsObject.setPhoneNumber(phone);
+//        smsObject.setSignName(signName);
+//        smsObject.setTemplateCode(templateCode);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("shopId", shopId);
+        jsonObject.put("password", pwd);
+        smsObject.setTemplateJsonParam(jsonObject.toJSONString());
 
-  private void addAccountExpireTimeDays(EnterpriseAccount enterpriseAccount, int days) {
+        rabbitTemplate.convertAndSend(RabbitMQConfig.ACCOUNT_QUEUE, JSON.toJSONString(smsObject));
+    }
+
+
+    private void addAccountExpireTimeDays(EnterpriseAccount enterpriseAccount, int days) {
     LocalDateTime now = LocalDateTime.now();
     LocalDateTime expireTime = now.plusDays(days);
     enterpriseAccount.setExpireTime(expireTime);

@@ -1,9 +1,6 @@
 package com.restkeeper.operator.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -107,11 +104,11 @@ public class EnterpriseAccount implements Serializable {
 
 
     @ApiModelProperty(value = "最后更新时间")
-
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime lastUpdateTime;
 
     @ApiModelProperty(value = "是否删除， 1删除， 0未删除")
     @TableLogic
-    private Integer isDelete;
+    private Integer isDeleted;
 
 }

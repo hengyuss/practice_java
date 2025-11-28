@@ -20,4 +20,5 @@ public interface IEnterpriseAccountService extends IService<EnterpriseAccount> {
     boolean forbidden(Integer id);
 
     boolean resetPassword(Integer id, String OldPassword, String NewPassword);
+
 }

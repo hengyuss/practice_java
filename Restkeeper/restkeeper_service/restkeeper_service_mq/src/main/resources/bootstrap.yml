@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: restkeeper-mq
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.33.47.94:8848
+      config:
+        server-addr: 10.33.47.94:8848
+        file-extension: yml
+        sharedDataids: common.yml
+        refreshable-dataids: common.yml
+server:
+  port: 8089
