@@ -8,6 +8,8 @@ import com.restkeeper.operator.dto.UpdateEnterpriseDTO;
 import com.restkeeper.operator.entity.EnterpriseAccount;
 import com.restkeeper.operator.exception.AccountException;
 import com.restkeeper.operator.mapper.EnterpriseAccountMapper;
+import com.restkeeper.utils.AccountStatus;
+import com.restkeeper.utils.MD5CryptUtil;
 import io.netty.util.internal.StringUtil;
 import java.time.LocalDateTime;
 import org.apache.commons.codec.digest.Md5Crypt;
@@ -76,6 +78,49 @@ public class EnterpriseAccountServiceImpl extends ServiceImpl<EnterpriseAccountM
 
     boolean flag = this.updateById(enterpriseAccount);
 
+    return flag;
+  }
+
+  @Override
+  public boolean delete(Integer id) {
+    boolean flag = this.delete(id);
+    return flag;
+  }
+
+  @Override
+  @Transactional
+  public boolean recovery(Integer id) {
+    return this.recovery(id);
+  }
+
+  @Override
+  public boolean forbidden(Integer id) {
+    EnterpriseAccount enterpriseAccount = this.getById(id);
+    if (enterpriseAccount == null) {
+      throw new AccountException("账号不存在");
+    }
+    enterpriseAccount.setStatus(AccountStatus.Forbidden.getStatus());
+    boolean flag = this.updateById(enterpriseAccount);
+    return flag;
+  }
+
+  @Override
+  public boolean resetPassword(Integer id, String oldPassword, String newPassword) {
+    EnterpriseAccount enterpriseAccount = this.getById(id);
+    if (newPassword == null) {
+      throw new AccountException("新密码不能为空");
+    }
+    if (enterpriseAccount == null) {
+      throw new AccountException("账号不存在");
+    }
+    String oldPasswordMd5 = Md5Crypt.md5Crypt(oldPassword.getBytes());
+    if (!oldPasswordMd5.equals(enterpriseAccount.getPassword())) {
+      throw new AccountException("原始密码错误");
+    }
+
+    String newPasswordMd5 = Md5Crypt.md5Crypt(newPassword.getBytes());
+    enterpriseAccount.setPassword(newPasswordMd5);
+    boolean flag = this.updateById(enterpriseAccount);
     return flag;
   }
 

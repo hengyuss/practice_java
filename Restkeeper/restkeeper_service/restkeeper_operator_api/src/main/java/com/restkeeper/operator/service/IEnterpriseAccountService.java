@@ -12,4 +12,12 @@ public interface IEnterpriseAccountService extends IService<EnterpriseAccount> {
     boolean add(EnterpriseAccount account);
 
     boolean update(UpdateEnterpriseDTO updateEnterpriseDTO) throws AccountException;
+
+    boolean delete(Integer id);
+
+    boolean recovery(Integer id);
+
+    boolean forbidden(Integer id);
+
+    boolean resetPassword(Integer id, String OldPassword, String NewPassword);
 }
