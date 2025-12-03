@@ -3,7 +3,7 @@ package com.restkeeper.operator.controller;
 import com.restkeeper.operator.dto.ResetPwdDTO;
 import com.restkeeper.operator.dto.UpdateEnterpriseDTO;
 import com.restkeeper.operator.entity.EnterpriseAccount;
-import com.restkeeper.operator.exception.AccountException;
+import com.restkeeper.exception.AccountException;
 import com.restkeeper.operator.service.IEnterpriseAccountService;
 import com.restkeeper.operator.vo.AddEnterpriseAccountVO;
 import com.restkeeper.operator.vo.ResetPwdVO;
@@ -43,9 +43,10 @@ public class EnterpriseAccountController {
 
   @ApiOperation(value = "新增账号")
   @PutMapping("/add")
-  public boolean add(@RequestBody AddEnterpriseAccountVO addEnterpriseAccountVo) {
+  public Result add(@RequestBody AddEnterpriseAccountVO addEnterpriseAccountVo) {
     EnterpriseAccount enterpriseAccount = new EnterpriseAccount();
 
+    Result result = new Result();
     BeanUtils.copyProperties(addEnterpriseAccountVo, enterpriseAccount);
     LocalDateTime localDateTime = LocalDateTime.now();
     enterpriseAccount.setApplicationTime(localDateTime);
@@ -61,7 +62,12 @@ public class EnterpriseAccountController {
     } else {
       throw new RuntimeException("账号类型设置有误");
     }
-    return enterpriseAccountService.add(enterpriseAccount);
+    boolean flag = enterpriseAccountService.add(enterpriseAccount);
+    if (flag) {
+      return result.error("修改失败");
+    } else {
+      return result.ok("修改成功");
+    }
   }
 
   @ApiOperation(value = "账户查看")

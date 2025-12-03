@@ -1,11 +1,13 @@
 package com.restkeeper.utils;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
  * 返回结果通用封装
  */
 @Data
+@Builder
 public class Result {
     // 返回状态
     private int status;

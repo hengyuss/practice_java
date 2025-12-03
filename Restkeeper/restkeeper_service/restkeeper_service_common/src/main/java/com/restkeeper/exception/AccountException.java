@@ -1,4 +1,4 @@
-package com.restkeeper.operator.exception;
+package com.restkeeper.exception;
 
 
 import lombok.Data;

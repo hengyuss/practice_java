@@ -1,6 +1,8 @@
 spring:
   application:
-    name: restkeeper-mq
+    name: shop-dubbo-provider
+  profiles:
+    active: dev
   cloud:
     nacos:
       discovery:
@@ -8,7 +10,5 @@ spring:
       config:
         server-addr: 10.33.9.41:8848
         file-extension: yml
-        sharedDataids: common.yml
+        shared-dataids: common.yml
         refreshable-dataids: common.yml
-server:
-  port: 8089

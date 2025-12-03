@@ -1,6 +1,8 @@
 spring:
   application:
-    name: restkeeper-mq
+    name: enterpise-web
+  profiles:
+    active: dev
   cloud:
     nacos:
       discovery:
@@ -10,5 +12,6 @@ spring:
         file-extension: yml
         sharedDataids: common.yml
         refreshable-dataids: common.yml
+
 server:
-  port: 8089
+  port: 8081

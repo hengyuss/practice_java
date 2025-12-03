@@ -4,7 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.restkeeper.operator.dto.UpdateEnterpriseDTO;
 import com.restkeeper.operator.entity.EnterpriseAccount;
-import com.restkeeper.operator.exception.AccountException;
+import com.restkeeper.exception.AccountException;
+import com.restkeeper.utils.Result;
 
 public interface IEnterpriseAccountService extends IService<EnterpriseAccount> {
     IPage<EnterpriseAccount> queryPageByName(int pageNum, int pageSize, String name);
@@ -20,5 +21,7 @@ public interface IEnterpriseAccountService extends IService<EnterpriseAccount> {
     boolean forbidden(Integer id);
 
     boolean resetPassword(Integer id, String OldPassword, String NewPassword);
+
+    Result login(String shopId, String telephone, String loginPass);
 
 }

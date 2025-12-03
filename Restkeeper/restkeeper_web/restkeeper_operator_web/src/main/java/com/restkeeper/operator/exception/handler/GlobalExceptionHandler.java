@@ -1,6 +1,6 @@
 package com.restkeeper.operator.exception.handler;
 
-import com.restkeeper.operator.exception.AccountException;
+import com.restkeeper.exception.AccountException;
 import com.restkeeper.utils.Result;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
