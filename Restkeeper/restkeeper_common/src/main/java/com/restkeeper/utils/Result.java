@@ -1,13 +1,17 @@
 package com.restkeeper.utils;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 返回结果通用封装
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Result {
     // 返回状态
     private int status;

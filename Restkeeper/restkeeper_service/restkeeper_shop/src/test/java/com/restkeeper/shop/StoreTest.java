@@ -1,10 +1,17 @@
-import com.restkeeper.shop.ShopProviderApplication;
+package com.restkeeper.shop;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.restkeeper.shop.entity.Brand;
 import com.restkeeper.shop.entity.Store;
+import com.restkeeper.shop.service.IBrandService;
 import com.restkeeper.shop.service.IStoreService;
 import org.apache.dubbo.config.annotation.Reference;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -40,13 +47,10 @@ public class StoreTest {
 
 
   @Test
-
   public void queryTest(){
-
     Store store = storeService.getById("1205325480559947778");
-
     System.out.println(store);
-
   }
+
 
 }

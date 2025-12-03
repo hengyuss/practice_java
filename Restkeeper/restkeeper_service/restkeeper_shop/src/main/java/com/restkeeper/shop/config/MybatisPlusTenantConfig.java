@@ -27,7 +27,7 @@ public class MybatisPlusTenantConfig {
       public Expression getTenantId(boolean where) {
         String shopId = RpcContext.getContext().getAttachment("shopId");
         if (null == shopId) {
-          throw new RuntimeException("currentProviderId error");
+          throw new RuntimeException("shopId is null");
         }
         return new StringValue(shopId);
       }

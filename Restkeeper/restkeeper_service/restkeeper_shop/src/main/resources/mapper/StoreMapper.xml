@@ -7,6 +7,8 @@
         <id column="store_id" property="storeId" />
         <result column="brand_id" property="brandId" />
         <result column="store_manager_id" property="storeManagerId" />
+        <association property="brand" column="brand_id"
+          select="com.restkeeper.shop.mapper.BrandMapper.selectById"></association>
     </resultMap>
 
 </mapper>

@@ -5,6 +5,10 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.restkeeper.shop.entity.Brand">
         <id column="brand_id" property="brandId" />
+        <association property="storeCount" column="brand_id"
+          select="com.restkeeper.shop.mapper.StoreMapper.getStoreCount"></association>
+        <association property="cityCount" column="brand_id"
+          select="com.restkeeper.shop.mapper.StoreMapper.getCityCount"></association>
     </resultMap>
 
 </mapper>

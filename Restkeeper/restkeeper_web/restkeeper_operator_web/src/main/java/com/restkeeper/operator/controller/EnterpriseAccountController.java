@@ -63,7 +63,7 @@ public class EnterpriseAccountController {
       throw new RuntimeException("账号类型设置有误");
     }
     boolean flag = enterpriseAccountService.add(enterpriseAccount);
-    if (flag) {
+    if (!flag) {
       return result.error("修改失败");
     } else {
       return result.ok("修改成功");
